@@ -16,3 +16,7 @@ Features:
 <strong>Helpful Assistance</strong>: Feeling lost? No worries! A built-in help command provides a quick rundown of available commands, ensuring you're always in control.
 
 <strong>Smooth Exit</strong>: When you're done managing your tasks, simply exit the application using the "exit" command. The tool ensures you leave on a positive note.
+
+## Pre-requisites
+<pre>pip install prettytable</pre>
+<pre>pip install colorama</pre>
