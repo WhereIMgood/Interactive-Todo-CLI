@@ -15,17 +15,24 @@ with open('todos.json', 'r') as todos:
 def display_todos(todos_dict):
     table = PrettyTable()
     table.field_names = ["Todo Name", "Description", "Status"]
+    table.border = True  # Add borders
     
     for todo_name, todo_info in todos_dict.items():
         name_colored = f"{Fore.WHITE}{todo_name}{Style.RESET_ALL}"
         desc_colored = f"{Fore.WHITE}{todo_info['todo_description']}{Style.RESET_ALL}"
         if todo_info['status'] == "Completed":
-        	status_colored = f"{Fore.GREEN}{todo_info['status']}{Style.RESET_ALL}"
+            status_colored = f"{Fore.GREEN}{todo_info['status']}{Style.RESET_ALL}"
         elif todo_info['status'] == "Incomplete":
-        	status_colored = f"{Fore.RED}{todo_info['status']}{Style.RESET_ALL}"
+            status_colored = f"{Fore.RED}{todo_info['status']}{Style.RESET_ALL}"
         table.add_row([name_colored, desc_colored, status_colored])
     
+        # Add a separator row made of dashes (-) between rows
+        table.add_row([" " * len(name_colored), " " * len(desc_colored), " " * len(status_colored)])
+    
+    # Print the table with borders and separators
     print(table)
+
+
 
 def update_todo_status(todo_name, new_status):
     try:
@@ -40,17 +47,18 @@ def update_todo_status(todo_name, new_status):
         print(f"Todo '{todo_name}' does not exist.")
 
 def help():
-	print("Welcome to your terminal-based todo Manager.")
-	print(f"{Fore.CYAN}Available commands:")
-	print(f"{Fore.YELLOW}- add todo <todo_name>: Add a new todo")
-	print(f"{Fore.YELLOW}- del todo <todo_name>: Delete a todo")
-	print(f"{Fore.YELLOW}- list todos: List all todos")
-	print(f"{Fore.YELLOW}- complete todo <todo_name>: Mark a todo as completed")
-	print(f"{Fore.YELLOW}- clear: Clear the screen")
-	print(f"{Fore.YELLOW}- help: Display this help message")
-	print(f"{Fore.YELLOW}- change password: change the password")
-	print(f"{Fore.YELLOW}- exit: Exit the program{Style.RESET_ALL}")
-	print("\n\n")
+    print("Welcome to your terminal-based todo Manager.")
+    print(f"{Fore.CYAN}Available commands:")
+    print(f"{Fore.YELLOW}- add todo <todo_name>: Add a new todo")
+    print(f"{Fore.YELLOW}- del todo <todo_name>: Delete a todo")
+    print(f"{Fore.YELLOW}- list todos: List all todos")
+    print(f"{Fore.YELLOW}- complete todo <todo_name>: Mark a todo as completed")
+    print(f"{Fore.YELLOW}- clear: Clear the screen")
+    print(f"{Fore.YELLOW}- help: Display this help message")
+    print(f"{Fore.YELLOW}- change password: change the password")
+    print(f"{Fore.YELLOW}- del all todos: Delete all your todos")
+    print(f"{Fore.YELLOW}- exit: Exit the program{Style.RESET_ALL}")
+    print("\n\n")
 
 def dashboard():
     while True:
@@ -100,7 +108,11 @@ def dashboard():
         	update = open('user.txt', 'w')
         	update.write(new_password)
         	update.close()
-
+        elif command == "del all todos":
+            todos_data["Todos"].clear()
+            print("All todos are deleted")
+            with open('todos.json', 'w') as file:
+                json.dump(todos_data, file, indent=4)
 def auth(password_auth):
     if password_auth == password:
         help()
@@ -108,4 +120,4 @@ def auth(password_auth):
     else:
         print("Incorrect Password")
 
-auth(input("Enter password : "))
+auth(input("Enter your password: "))
